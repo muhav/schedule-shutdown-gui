@@ -1,13 +1,9 @@
 # Schedule Shutdown
 A simple program with PyQt5 to schedule automatic shutdown in Windows.
 
-<br>
+## Main Window
 
-## Example
-
-![main Window](https://github.com/bugstop/schedule-shutdown-gui/blob/master/screenshots/v_0_0_1.png)
-
-<br>
+![main window](https://github.com/bugstop/schedule-shutdown-gui/blob/master/screenshots/v_0_0_1.png)
 
 ## License
 
