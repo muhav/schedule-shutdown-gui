@@ -33,6 +33,8 @@ class App(QMainWindow):
         self.table_widget = MyTableWidget(self)
         self.setCentralWidget(self.table_widget)
 
+        self.table_widget.countdown(60, new=True)
+
         self.show()
 
     def closeEvent(self, event):
@@ -276,12 +278,12 @@ class MyTableWidget(QWidget):
 
         if remaining <= 0:
             if self.box.isChecked():
-                os.popen('ping 127.0.0.1 -n 6 > nul & shutdown -h')
-                # os.popen(target=os.system, args=('timeout 5 & shutdown -h',)).start()
                 # Process(target=os.system, args=('ping 127.0.0.1 -n 6 > nul & shutdown -h',)).start()
+                os.popen('ping 127.0.0.1 -n 16 > nul & shutdown -h')
+                os._exit(0)
             else:
-                os.popen('timeout 5 & shutdown /s /f /t 0', )
-            exit(0)
+                os.popen('ping 127.0.0.1 -n 6 > nul & shutdown /s /f /t 30')
+                os._exit(0)
             return
 
         t = threading.Timer(1, self.countdown, (remaining - 1,))
@@ -294,6 +296,36 @@ class MyTableWidget(QWidget):
 
         self.tab2.layout = QVBoxLayout(self)
 
+        self.horizontalGroupBox = QGroupBox("Commands")
+        self.horizontalGroupBox.setFont(frutiger)
+        self.horizontalGroupBox.setStyleSheet("padding: 15px; border: 1px solid lightgray; border-radius: 0")
+        cmd = QGridLayout()
+        cmd.setSpacing(10)
+
+        c = "> shutdown /s /f /t 0&nbsp;&nbsp;" \
+            "# Shutdown the computer<br/>" \
+            "> shutdown /s /hybrid&nbsp;&nbsp;" \
+            "# Shutdown (for fast startup)<br/>" \
+            "> shutdown /h&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" \
+            "# Hibernate the local computer<br/>" \
+            "> shutdown /r&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" \
+            "# Full shutdown and restart<br/>" \
+            "> shutdown /r /o&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" \
+            "# Advanced Boot Options Menu<br/>" \
+            "> shutdown /a&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" \
+            "# Abort a system shutdown"
+
+        tx = QTextEdit(c, self)
+        tx.setAlignment(Qt.AlignLeft)
+        tx.setFont(monaco)
+        tx.setStyleSheet("padding: 0; border: 0;")
+        tx.setReadOnly(True)
+        tx.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        cmd.addWidget(tx)
+
+        self.horizontalGroupBox.setLayout(cmd)
+        self.tab2.layout.addWidget(self.horizontalGroupBox)
+
         self.horizontalGroupBox = QGroupBox("Copyright")
         self.horizontalGroupBox.setFont(frutiger)
         self.horizontalGroupBox.setStyleSheet("padding: 20px; border: 1px solid lightgray; border-radius: 0")
@@ -303,7 +335,7 @@ class MyTableWidget(QWidget):
         with open('LICENSE') as f:
             c = f.read()
 
-        ls = QTextEdit(c.replace('\n\n', '<br/><br/>'), self)
+        ls = QTextEdit(c.replace('\n\n', '<br/>').replace('Permission', '<br/>Permission'), self)
         ls.setAlignment(Qt.AlignLeft)
         ls.setFont(monaco)
         ls.setStyleSheet("padding: 0; border: 0;")
@@ -320,7 +352,7 @@ class MyTableWidget(QWidget):
         info = QGridLayout()
         info.setSpacing(10)
 
-        label4 = QLabel('Version: 0.0.1', self)
+        label4 = QLabel('Version: 0.1.0', self)
         label4.setAlignment(Qt.AlignCenter)
         label4.setFont(monaco)
         label4.setStyleSheet("padding: 0; border: 0")
@@ -346,16 +378,3 @@ if __name__ == '__main__':
     ex = App()
     ex.table_widget.textbox.setFocus()
     sys.exit(app.exec_())
-
-# Shutdown the computer.
-# > shutdown /s /f /t 0
-# Performs a shutdown of the computer and prepares it for fast startup.
-# > shutdown /s /hybrid
-# Hibernate the local computer.
-# > shutdown /h
-# Full shutdown and restart the computer.
-# > shutdown /r
-# Abort a system shutdown.
-# > shutdown /a
-# Advanced Boot Options Menu
-# > shutdown /r /o
