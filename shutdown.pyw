@@ -20,6 +20,7 @@ class App(QMainWindow):
         self.width = 640
         self.height = 480
         self.setFixedSize(self.width, self.height)
+        self.setWindowFlags(Qt.WindowStaysOnTopHint)
 
         self.setWindowIcon(QIcon('icon.ico'))
         self.setWindowTitle(self.title)
